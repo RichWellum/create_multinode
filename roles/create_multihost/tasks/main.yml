@@ -9,28 +9,28 @@
 - name: Count Controllers
   hosts: localhost
   connection: local
-  shell: cat {{command_output.stdout}} | awk '/overcloud-controller/ { count++ } END { print count }'
+  shell: source /home/stack/stackrc && nova list | awk '/overcloud-controller/ { count++ } END { print count }'
   register: countControllers
 - debug: msg="{{countControllers.stdout}}"
 
 - name: Count Computes
   hosts: localhost
   connection: local
-  shell: cat {{command_output.stdout}} | awk '/overcloud-ovscompute/ { count++ } END { print count }'
+  shell: source /home/stack/stackrc && nova list | awk '/overcloud-ovscompute/ { count++ } END { print count }'
   register: countComputes
 - debug: msg="{{countComputes.stdout}}"
 
 - name: Grab Controller name
   hosts: localhost
   connection: local
-  shell: O=`cat {{command_output.stdout}} | grep 'controller' | grep '\-0' | awk ' {print $4}'`; echo "${O//-0}"
+  shell: O=`source /home/stack/stackrc && nova list | grep 'controller' | grep '\-0' | awk ' {print $4}'`; echo "${O//-0}"
   register: nameController
 - debug: msg="{{nameController.stdout}}"
 
 - name: Grab Compute name
   hosts: localhost
   connection: local
-  shell: O=`cat {{command_output.stdout}} | grep 'compute' | grep '\-0' | awk ' {print $4}'`; echo "${O//-0}"
+  shell: O=`source /home/stack/stackrc && nova list | grep 'compute' | grep '\-0' | awk ' {print $4}'`; echo "${O//-0}"
   register: nameCompute
 - debug: msg="{{nameCompute.stdout}}"
 

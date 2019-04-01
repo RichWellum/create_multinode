@@ -1,11 +1,11 @@
 [control]
-{{nameController}}-[0:{{countControllers}}] ansible_user={{user_admin}} ansible_become={{root_status}} ansible_ssh_private_key_file={{ssh_key}}
+{{nameController.stdout}}-[0:{{countControllers.stdout}}] ansible_user={{user_admin}} ansible_become={{root_status}} ansible_ssh_private_key_file={{ssh_key}}
  
 [network:children]
 control
  
 [compute]
-{{nameCompute}}-[0:{{countComputes}}] ansible_user={{user_admin}} ansible_become={{root_status}} ansible_ssh_private_key_file={{ssh_key}}
+{{nameCompute.stdout}}-[0:{{countComputes.stdout}}] ansible_user={{user_admin}} ansible_become={{root_status}} ansible_ssh_private_key_file={{ssh_key}}
 
 [monitoring:children]
 control

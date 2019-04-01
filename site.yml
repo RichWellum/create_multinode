@@ -1,9 +1,8 @@
 ---
-- name: Create a Kolla-Ansible Multihost Inventory file
+- name: Create a Kolla-Ansible Multihost Inventory file (/tmp/multinode.yml)
   hosts: 127.0.0.1
   connection: local
   become: True
   gather_facts: False
-  shell: source /home/stack/stackrc
   roles:
     - create_multihost
