@@ -1,0 +1,31 @@
+---
+# tasks file for create_multiode_inventory
+# O=`grep 'controller' nova-list.j2 | grep '\-0' | awk ' {print $4}'`; echo "${O//-0}"
+- name: Create Multinode Inventry from nova list
+  hosts: localhost
+  connection: local
+  tasks:
+  - name: Gather nova list output
+    command: nova list
+    register: command_output
+  - debug: msg="{{command_output.stdout}}"
+
+  - name: Count Controllers
+    shell: source /home/stack/stackrc && nova list | awk '/overcloud-controller/ { count++ } END { print count }'
+    register: countControllers
+
+  - name: Count Computes
+    shell: source /home/stack/stackrc && nova list | awk '/overcloud-ovscompute/ { count++ } END { print count }'
+    register: countComputes
+
+  - name: Grab Controller name
+    shell: O=`source /home/stack/stackrc && nova list | grep 'controller'  grep '\-0' | awk ' {print $4}'`; echo '${O//-0}'
+    register: nameController
+
+  - name: Grab Compute name
+    shell: O=`source /home/stack/stackrc && nova list | grep 'compute' | grep '\-0' | awk ' {print $4}'`; echo "${O//-0}"
+    register: nameCompute
+
+  - name: Create Multinode Inventory file
+    template: src=multinode.yml dest=/tmp/multinode.yml
+    shell: cat /tmp/multinode.yml
