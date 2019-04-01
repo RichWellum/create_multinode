@@ -2,35 +2,35 @@
 - name: Gather nova list output
   hosts: localhost
   connection: local
-  command: nova list
+  shell: "source /home/stack/stackrc && nova list"
   register: command_output
 - debug: msg="{{command_output.stdout}}"
 
 - name: Count Controllers
   hosts: localhost
   connection: local
-  shell: nova list | awk '/overcloud-controller/ { count++ } END { print count }'
+  shell: cat {{command_output}} | awk '/overcloud-controller/ { count++ } END { print count }'
   register: countControllers
 - debug: msg="{{countControllers.stdout}}"
 
 - name: Count Computes
   hosts: localhost
   connection: local
-  shell: nova list | awk '/overcloud-ovscompute/ { count++ } END { print count }'
+  shell: cat {{command_output}} | awk '/overcloud-ovscompute/ { count++ } END { print count }'
   register: countComputes
 - debug: msg="{{countComputes.stdout}}"
 
 - name: Grab Controller name
   hosts: localhost
   connection: local
-  shell: O=`nova list | grep 'controller' | grep '\-0' | awk ' {print $4}'`; echo "${O//-0}"
+  shell: O=`cat {{command_output}} | grep 'controller' | grep '\-0' | awk ' {print $4}'`; echo "${O//-0}"
   register: nameController
 - debug: msg="{{nameController.stdout}}"
 
 - name: Grab Compute name
   hosts: localhost
   connection: local
-  shell: O=`nova list | grep 'compute' | grep '\-0' | awk ' {print $4}'`; echo "${O//-0}"
+  shell: O=`cat {{command_output}} | grep 'compute' | grep '\-0' | awk ' {print $4}'`; echo "${O//-0}"
   register: nameCompute
 - debug: msg="{{nameCompute.stdout}}"
 
