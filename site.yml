@@ -1,5 +1,5 @@
 ---
-- name: Create a Kolla-Ansible Multihost Inventory file (/tmp/multinode.yml)
+- name: Create a Kolla-Ansible Multihost Inventory file (/etc/kolla/config/inventory/multinode)
   hosts: 127.0.0.1
   connection: local
   become: True
